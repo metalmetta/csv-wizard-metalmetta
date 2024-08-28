@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Trash2, Plus, Download, Upload } from 'lucide-react';
+import { Trash2, Plus, Download, Upload, FileUp } from 'lucide-react';
 
 const CSVTool = () => {
   const [data, setData] = useState([]);
@@ -10,16 +10,22 @@ const CSVTool = () => {
 
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const content = e.target.result;
-      const lines = content.split('\n');
-      const headers = lines[0].split(',');
-      const rows = lines.slice(1).map(line => line.split(','));
-      setHeaders(headers);
-      setData(rows);
-    };
-    reader.readAsText(file);
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const content = e.target.result;
+        const lines = content.split('\n');
+        const headers = lines[0].split(',');
+        const rows = lines.slice(1).map(line => line.split(','));
+        setHeaders(headers);
+        setData(rows);
+      };
+      reader.readAsText(file);
+    }
+  };
+
+  const triggerFileUpload = () => {
+    document.getElementById('file-upload').click();
   };
 
   const handleCellEdit = (rowIndex, colIndex, value) => {
@@ -60,9 +66,16 @@ const CSVTool = () => {
     <div className="container mx-auto p-4 bg-gradient-to-r from-gradient-start to-gradient-end min-h-screen">
       <h1 className="text-2xl font-bold mb-4 text-white">CSV Tool</h1>
       <div className="mb-4">
-        <Input type="file" accept=".csv" onChange={handleFileUpload} className="mb-2 bg-white" />
-        <Button onClick={addRow} className="mr-2 bg-white text-gradient-start hover:bg-gradient-start hover:text-white"><Plus className="mr-2 h-4 w-4" /> Add Row</Button>
-        <Button onClick={downloadCSV} className="bg-white text-gradient-end hover:bg-gradient-end hover:text-white"><Download className="mr-2 h-4 w-4" /> Download CSV</Button>
+        <Input id="file-upload" type="file" accept=".csv" onChange={handleFileUpload} className="hidden" />
+        <Button onClick={triggerFileUpload} className="mr-2 bg-white text-gradient-start hover:bg-gradient-start hover:text-white">
+          <FileUp className="mr-2 h-4 w-4" /> Choose File
+        </Button>
+        <Button onClick={addRow} className="mr-2 bg-white text-gradient-start hover:bg-gradient-start hover:text-white">
+          <Plus className="mr-2 h-4 w-4" /> Add Row
+        </Button>
+        <Button onClick={downloadCSV} className="bg-white text-gradient-end hover:bg-gradient-end hover:text-white">
+          <Download className="mr-2 h-4 w-4" /> Download CSV
+        </Button>
       </div>
       {headers.length > 0 && (
         <Table className="bg-white bg-opacity-90 rounded-lg overflow-hidden">
