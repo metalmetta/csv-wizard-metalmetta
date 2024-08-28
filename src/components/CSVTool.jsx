@@ -57,36 +57,37 @@ const CSVTool = () => {
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">CSV Tool</h1>
+    <div className="container mx-auto p-4 bg-gradient-to-r from-gradient-start to-gradient-end min-h-screen">
+      <h1 className="text-2xl font-bold mb-4 text-white">CSV Tool</h1>
       <div className="mb-4">
-        <Input type="file" accept=".csv" onChange={handleFileUpload} className="mb-2" />
-        <Button onClick={addRow} className="mr-2"><Plus className="mr-2 h-4 w-4" /> Add Row</Button>
-        <Button onClick={downloadCSV}><Download className="mr-2 h-4 w-4" /> Download CSV</Button>
+        <Input type="file" accept=".csv" onChange={handleFileUpload} className="mb-2 bg-white" />
+        <Button onClick={addRow} className="mr-2 bg-white text-gradient-start hover:bg-gradient-start hover:text-white"><Plus className="mr-2 h-4 w-4" /> Add Row</Button>
+        <Button onClick={downloadCSV} className="bg-white text-gradient-end hover:bg-gradient-end hover:text-white"><Download className="mr-2 h-4 w-4" /> Download CSV</Button>
       </div>
       {headers.length > 0 && (
-        <Table>
+        <Table className="bg-white bg-opacity-90 rounded-lg overflow-hidden">
           <TableHeader>
-            <TableRow>
+            <TableRow className="bg-gradient-to-r from-gradient-start to-gradient-end">
               {headers.map((header, index) => (
-                <TableHead key={index}>{header}</TableHead>
+                <TableHead key={index} className="text-white">{header}</TableHead>
               ))}
-              <TableHead>Actions</TableHead>
+              <TableHead className="text-white">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {data.map((row, rowIndex) => (
-              <TableRow key={rowIndex}>
+              <TableRow key={rowIndex} className="hover:bg-gray-100">
                 {row.map((cell, cellIndex) => (
                   <TableCell key={cellIndex}>
                     <Input
                       value={cell}
                       onChange={(e) => handleCellEdit(rowIndex, cellIndex, e.target.value)}
+                      className="w-full"
                     />
                   </TableCell>
                 ))}
                 <TableCell>
-                  <Button variant="destructive" onClick={() => deleteRow(rowIndex)}>
+                  <Button variant="destructive" onClick={() => deleteRow(rowIndex)} className="bg-red-500 hover:bg-red-600">
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </TableCell>
